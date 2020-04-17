@@ -939,11 +939,19 @@ function U($url='',$vars='',$suffix=true,$domain=false) {
             $url   .=   '&'.$vars;
         }
     }else{ // PATHINFO模式或者兼容URL模式
+        $_app = __APP__;
+        if (URL_REWRITE == C('URL_MODEL')) {
+            $_url    =   dirname(_PHP_FILE_);
+            if ($_url == '/' || $_url == '\\') {
+                $_url    =   '';
+            }
+            $_app = strip_tags($_url);
+        }
         if(isset($route)) {
-            $url    =   __APP__.'/'.rtrim($url,$depr);
+            $url    =   $_app.'/'.rtrim($url,$depr);
         }else{
             $module =   (defined('BIND_MODULE') && BIND_MODULE==$module )? '' : $module;
-            $url    =   __APP__.'/'.($module?$module.MODULE_PATHINFO_DEPR:'').implode($depr,array_reverse($var));
+            $url    =   $_app.'/'.($module?$module.MODULE_PATHINFO_DEPR:'').implode($depr,array_reverse($var));
         }
         if($urlCase){
             $url    =   strtolower($url);
